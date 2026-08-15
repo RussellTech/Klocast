@@ -152,4 +152,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: r2 object put ${{ vars.CLOUDFLARE_R2_BUCKET }}/audio/${{ matrix.target }} --file media/audio/${{ matrix.source }} --content-type audio/mpeg --remote
+          command: r2 object put ${{ vars.CLOUDFLARE_R2_BUCKET }}/audio/${{ matrix.target }} --file media/audio/${{ matrix.source }} --content-type audio/mpeg
