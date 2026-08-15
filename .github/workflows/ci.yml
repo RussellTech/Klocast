@@ -79,11 +79,17 @@ jobs:
   prepare_media:
     name: Read audio manifest
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       matrix: ${{ steps.manifest.outputs.matrix }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.3'
 
       - name: Build upload matrix from manifest
         id: manifest
