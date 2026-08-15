@@ -4,7 +4,7 @@ import path from 'node:path';
 test('homepage and episode navigation', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Klocast/);
-  await expect(page.locator('h1')).toContainText('Talking about SEO and the Web');
+  await expect(page.getByRole('heading', { name: /Talking about SEO and the Web/ })).toBeVisible();
   await page
     .getByRole('link', { name: /Beginner 1/ })
     .first()
@@ -50,5 +50,5 @@ test('keyboard skip link and mobile layout', async ({ page }) => {
 test('404 is genuine', async ({ page }) => {
   const response = await page.goto('/this-route-does-not-exist/');
   expect(response?.status()).toBe(404);
-  await expect(page.locator('h1')).toContainText('not here');
+  await expect(page.getByRole('heading', { name: /not here/i })).toBeVisible();
 });
