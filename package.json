@@ -1,0 +1,38 @@
+{
+  "name": "klocast-static",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format:check": "prettier --check \"src/**/*.{astro,ts,md}\" \"tests/**/*.{ts,md}\" \"scripts/**/*.mjs\" \"*.{mjs,ts,json}\" \"docs/**/*.md\" \"README.md\" \".github/**/*.yml\"",
+    "check": "astro check",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "npm run build && vitest run tests/integration",
+    "test:e2e": "playwright test tests/e2e",
+    "test:accessibility": "playwright test tests/e2e/accessibility.spec.ts",
+    "test:visual": "playwright test tests/e2e/visual.spec.ts",
+    "test:coverage": "vitest run tests/unit --coverage",
+    "test:live": "node scripts/live-audit.mjs",
+    "test:all": "npm run format:check && npm run check && npm run test:unit && npm run test:coverage && npm run test:integration && npm run test:e2e && npm run test:accessibility && npm run test:visual"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "fast-xml-parser": "^5.10.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

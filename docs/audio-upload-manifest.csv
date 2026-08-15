@@ -1,0 +1,3 @@
+source_filename,source_bytes,mime_type,target_url,storage,notes
+Beginner-Episode-1-01092019.mp3,22941330,audio/mpeg,https://media.klocast.com/audio/beginner-1-your-own-domain.mp3,Cloudflare R2 + custom media domain,Source: media/audio/Beginner-Episode-1-01092019.mp3; preserve byte length and HTTP range support.
+Episode-1-28072019.mp3,51470767,audio/mpeg,https://media.klocast.com/audio/Episode-1-28072019.mp3,Cloudflare R2 + custom media domain,Source: media/audio/Episode-1-28072019.mp3; preserve byte length and HTTP range support.

@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import EpisodeCard from '../components/EpisodeCard.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../lib/site';
+const episodes = (await getCollection('episodes')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  url: 'https://klocast.com/',
+  image: 'https://klocast.com/images/podcast-artwork.jpg',
+  author: { '@type': 'Person', name: 'Aaron Russell' },
+  inLanguage: 'en-GB',
+};
+---
+
+<Layout title={`${SITE_TITLE} - ${SITE_DESCRIPTION}`} jsonLd={jsonLd}>
+  <section class="hero shell">
+    <p class="eyebrow">Klocast</p><h1>Talking about SEO and the Web</h1><p class="intro">
+      {SITE_DESCRIPTION}. Aaron Russell and Nate Smith explore the web, search and the ideas behind building an online
+      presence.
+    </p><a class="rss-link" href="/feed/podcast/"
+      >Subscribe with the podcast RSS feed <span aria-hidden="true">↗</span></a
+    >
+  </section>
+  <section class="episodes shell" aria-labelledby="latest-heading">
+    <div class="section-heading"><p class="eyebrow">The archive</p><h2 id="latest-heading">Episodes</h2></div>{
+      episodes.map((episode) => <EpisodeCard episode={episode} />)
+    }
+  </section>
+</Layout>
+<style>
+  .hero {
+    padding: clamp(4rem, 11vw, 9rem) 0 clamp(3rem, 8vw, 6rem);
+  }
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-style: italic;
+    letter-spacing: 0.04em;
+  }
+  h1 {
+    max-width: 10ch;
+    margin: 0;
+    font-size: clamp(3.2rem, 10vw, 8.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.075em;
+  }
+  .intro {
+    max-width: 48ch;
+    margin: 2rem 0 1.5rem;
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  }
+  .rss-link {
+    display: inline-block;
+    padding: 0.8rem 1rem;
+    background: #000;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .rss-link:hover {
+    background: #333;
+  }
+  .episodes {
+    padding-bottom: 2rem;
+  }
+  .section-heading {
+    border-bottom: 3px solid #000;
+    margin-bottom: 1rem;
+  }
+  .section-heading h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+</style>

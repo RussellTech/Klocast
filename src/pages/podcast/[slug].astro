@@ -1,0 +1,216 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { audioUrl, canonicalUrl, durationToIso, formatDate, SITE_TITLE } from '../../lib/site';
+export async function getStaticPaths() {
+  const episodes = await getCollection('episodes');
+  return episodes.map((episode) => ({ params: { slug: episode.id }, props: { episode } }));
+}
+const { episode } = Astro.props;
+const { data } = episode;
+const { Content } = await render(episode);
+const all = (await getCollection('episodes')).sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+const index = all.findIndex((item) => item.id === episode.id);
+const previous = all[index - 1];
+const next = all[index + 1];
+const url = canonicalUrl(`/podcast/${episode.id}`);
+const imageUrl = `https://klocast.com${data.artwork}`;
+const publicAudioUrl = audioUrl(data.audioPath, data.audioOrigin);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  url,
+  name: data.title,
+  datePublished: data.pubDate.toISOString(),
+  description: data.description,
+  duration: durationToIso(data.duration),
+  image: imageUrl,
+  associatedMedia: {
+    '@type': 'MediaObject',
+    contentUrl: publicAudioUrl,
+    encodingFormat: data.audioMime,
+    contentSize: data.actualBytes,
+  },
+  partOfSeries: { '@type': 'PodcastSeries', name: data.series, url: canonicalUrl('/') },
+};
+---
+
+<Layout
+  title={`${data.title} - ${SITE_TITLE}`}
+  description={data.description}
+  path={`/podcast/${episode.id}`}
+  image={data.artwork}
+  jsonLd={jsonLd}
+>
+  <article class="episode shell">
+    <header class="episode-header">
+      <p class="eyebrow">
+        {data.series}{data.season && data.episode ? ` · Season ${data.season}, episode ${data.episode}` : ''}
+      </p><h1>{data.title}</h1><div class="meta">
+        <span>Published {formatDate(data.pubDate)}</span>{
+          data.recordedDate && <span>Recorded {data.recordedDate}</span>
+        }<span>{data.duration}</span>
+      </div>
+    </header>
+    <div class="episode-grid">
+      <div>
+        <img class="artwork" src={data.artwork} alt={data.artworkAlt} /><div class="player">
+          <p class="player-label">Listen to this episode</p><audio
+            controls
+            preload="metadata"
+            src={audioUrl(data.audioPath, data.audioOrigin)}
+            aria-label={`Play ${data.title}`}>Your browser does not support the audio element.</audio
+          ><a class="download" href={audioUrl(data.audioPath, data.audioOrigin)} download>Download audio file</a>{
+            data.audioOrigin === 'r2' && (
+              <p class="storage-note">This episode is served from the configured podcast media store.</p>
+            )
+          }
+        </div>
+      </div><div class="show-notes"><h2>Show notes</h2><Content /></div>
+    </div>
+    <nav class="episode-nav" aria-label="Episode navigation">
+      {
+        previous ? (
+          <a href={`/podcast/${previous.id}/`}>
+            <span>Previous episode</span>
+            {previous.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }{
+        next ? (
+          <a class="next" href={`/podcast/${next.id}/`}>
+            <span>Next episode</span>
+            {next.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </article>
+</Layout>
+<style>
+  .episode {
+    padding: clamp(3rem, 8vw, 7rem) 0 2rem;
+  }
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-style: italic;
+  }
+  h1 {
+    max-width: 12ch;
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.92;
+    letter-spacing: -0.07em;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 1.6rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .meta span + span::before {
+    content: '·';
+    margin-right: 1.25rem;
+  }
+  .episode-grid {
+    display: grid;
+    grid-template-columns: minmax(250px, 42%) 1fr;
+    gap: clamp(2rem, 7vw, 6rem);
+    margin-top: clamp(3rem, 8vw, 7rem);
+    align-items: start;
+  }
+  .artwork {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .player {
+    margin-top: 1.2rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+  }
+  .player-label {
+    margin: 0 0 0.6rem;
+    font-weight: 700;
+  }
+  audio {
+    display: block;
+    width: 100%;
+  }
+  .download {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-weight: 700;
+  }
+  .storage-note {
+    color: var(--muted);
+    font-size: 0.84rem;
+  }
+  .show-notes {
+    max-width: 66ch;
+    font-size: 1.08rem;
+  }
+  .show-notes h2 {
+    margin-top: 0;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  .show-notes :global(h2) {
+    margin-top: 2.4rem;
+  }
+  .show-notes :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+  .show-notes :global(figure) {
+    margin: 1.5rem 0;
+  }
+  .show-notes :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 1.5rem 0;
+  }
+  .episode-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: clamp(4rem, 9vw, 8rem);
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+  }
+  .episode-nav a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-weight: 700;
+  }
+  .episode-nav a span {
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .episode-nav .next {
+    text-align: right;
+  }
+  @media (max-width: 700px) {
+    .episode-grid {
+      grid-template-columns: 1fr;
+    }
+    .episode-nav {
+      grid-template-columns: 1fr;
+    }
+    .episode-nav .next {
+      text-align: left;
+    }
+  }
+</style>

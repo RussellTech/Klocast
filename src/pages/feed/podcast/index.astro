@@ -1,0 +1,5 @@
+---
+// Keep the canonical slash URL usable in Astro's local preview as well as on
+// the static host, where the equivalent rule is maintained in _redirects.
+return Astro.redirect('/feed/podcast.xml', 301);
+---

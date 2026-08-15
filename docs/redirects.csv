@@ -1,0 +1,27 @@
+source,status,destination,proposed_destination,proposed_status,reason
+/feed/podcast,404/empty at apex,/feed/podcast/,,301,Normalise the requested primary feed path; Pages rewrites the slash URL to the generated XML file.
+/feed/podcast/klocast-talking-about-seo-and-the-web/,302 legacy apex target,/feed/podcast/klocast-talking-about-seo-and-the-web/,/feed/podcast/,301,Preserve the currently in-use apex feed target while consolidating on the primary production feed.
+/feed/podcast/series-1,200 legacy feed,/feed/podcast/series-1/,/feed/podcast/series-1/,301,Preserve series feed URL and trailing slash.
+/feed/podcast/beginner,200 legacy feed,/feed/podcast/beginner/,/feed/podcast/beginner/,301,Preserve series feed URL and trailing slash.
+/podcast/episode-1,200,/podcast/episode-1/,/podcast/episode-1/,301,Trailing-slash canonicalisation.
+/podcast/beginner-1-your-own-domain,200,/podcast/beginner-1-your-own-domain/,/podcast/beginner-1-your-own-domain/,301,Trailing-slash canonicalisation.
+/series/series-1/,200,/series/series-1/,/podcast/episode-1/,301,Series archive has one surviving episode.
+/series/beginner/,200,/series/beginner/,/podcast/beginner-1-your-own-domain/,301,Series archive has one surviving episode.
+/tag/beginner/,200,/tag/beginner/,/podcast/beginner-1-your-own-domain/,301,Tag has one surviving episode.
+/tag/domain/,200,/tag/domain/,/podcast/beginner-1-your-own-domain/,301,Tag has one surviving episode.
+/tag/hosting/,200,/tag/hosting/,/podcast/beginner-1-your-own-domain/,301,Tag has one surviving episode.
+/tag/google/,200,/tag/google/,/podcast/episode-1/,301,Tag has one surviving episode.
+/tag/hyper-local/,200,/tag/hyper-local/,/podcast/episode-1/,301,Tag has one surviving episode.
+/tag/search/,200,/tag/search/,/podcast/episode-1/,301,Tag has one surviving episode.
+/tag/seo/,200,/tag/seo/,/podcast/episode-1/,301,Tag has one surviving episode.
+/a,404,/a,,404,Destination could not be recovered; do not redirect to the homepage.
+/b1,404,/b1,,404,Destination could not be recovered; do not redirect to the homepage.
+/buydomain,404,/buydomain,,404,Destination could not be recovered; do not redirect to the homepage.
+/c,404,/c,,404,Destination could not be recovered; do not redirect to the homepage.
+/d,404,/d,,404,Destination could not be recovered; do not redirect to the homepage.
+/e,404,/e,,404,Destination could not be recovered; do not redirect to the homepage.
+/f,404,/f,,404,Destination could not be recovered; do not redirect to the homepage.
+/g,404,/g,,404,Destination could not be recovered; do not redirect to the homepage.
+/h,404,/h,,404,Destination could not be recovered; do not redirect to the homepage.
+/i,404,/i,,404,Destination could not be recovered; do not redirect to the homepage.
+/wix,404,/wix,,404,Destination could not be recovered; do not redirect to the homepage.

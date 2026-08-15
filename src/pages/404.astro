@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page not found - Klocast" description="The page you requested could not be found."
+  ><section class="not-found shell">
+    <p class="eyebrow">404</p><h1>That page is not here.</h1><p>
+      Try the episode archive or subscribe to the podcast feed.
+    </p><a href="/">Back to Klocast</a>
+  </section></Layout
+>
+<style>
+  .not-found {
+    padding: 7rem 0;
+    min-height: 55vh;
+  }
+  .eyebrow {
+    color: var(--muted);
+    font-style: italic;
+  }
+  .not-found h1 {
+    max-width: 10ch;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.07em;
+    margin: 0 0 1.5rem;
+  }
+  .not-found a {
+    font-weight: 700;
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/site';
+interface Props {
+  episode: CollectionEntry<'episodes'>;
+}
+const { episode } = Astro.props;
+const { data } = episode;
+---
+
+<article class="episode-card">
+  <a class="card-image" href={`/podcast/${episode.id}/`}
+    ><img src={data.artwork} alt={data.artworkAlt} loading="lazy" /></a
+  >
+  <div class="card-copy">
+    <p class="eyebrow">{data.series} · {formatDate(data.pubDate)} · {data.duration}</p><h2>
+      <a href={`/podcast/${episode.id}/`}>{data.title}</a>
+    </h2><p>{data.description}</p><a class="read-more" href={`/podcast/${episode.id}/`}
+      >Read show notes <span aria-hidden="true">→</span></a
+    >
+  </div>
+</article>
+<style>
+  .episode-card {
+    display: grid;
+    grid-template-columns: minmax(220px, 37%) 1fr;
+    gap: clamp(1.25rem, 4vw, 3.5rem);
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .card-image {
+    display: block;
+    aspect-ratio: 1;
+    background: #eee;
+    overflow: hidden;
+  }
+  .card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.25s ease;
+  }
+  .card-image:hover img,
+  .card-image:focus-visible img {
+    transform: scale(1.02);
+  }
+  .eyebrow {
+    margin: 0 0 0.7rem;
+    color: var(--muted);
+    font-size: 0.84rem;
+    font-style: italic;
+  }
+  h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.7rem, 4vw, 3.3rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+  h2 a {
+    text-decoration: none;
+  }
+  .card-copy > p:not(.eyebrow) {
+    max-width: 58ch;
+    color: #333;
+  }
+  .read-more {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-weight: 700;
+  }
+  .read-more span {
+    display: inline-block;
+    margin-left: 0.3rem;
+    transition: transform 0.2s ease;
+  }
+  .read-more:hover span {
+    transform: translateX(0.25rem);
+  }
+  @media (max-width: 650px) {
+    .episode-card {
+      grid-template-columns: 1fr;
+    }
+    .card-image {
+      max-width: 32rem;
+    }
+  }
+</style>
