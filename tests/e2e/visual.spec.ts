@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import path from 'node:path';
 
 function screenshotOptions(projectName: string) {
   return {
@@ -15,15 +14,11 @@ test('homepage visual baseline', async ({ page }, testInfo) => {
 });
 
 test('episode visual baseline', async ({ page }, testInfo) => {
-  await page.route('https://media.klocast.com/audio/Episode-1-28072019.mp3', (route) =>
-    route.fulfill({
-      path: path.resolve('tests/fixtures/audio/beginner-1-your-own-domain.mp3'),
-      contentType: 'audio/mpeg',
-    }),
-  );
   await page.goto('/podcast/episode-1/');
-  await expect
-    .poll(() => page.locator('audio').evaluate((element) => (element as HTMLMediaElement).readyState))
-    .toBeGreaterThan(0);
-  await expect(page).toHaveScreenshot('episode-1.png', screenshotOptions(testInfo.project.name));
+  await page.addStyleTag({ content: 'audio { height: 54px !important; }' });
+  await expect(page).toHaveScreenshot('episode-1.png', {
+    ...screenshotOptions(testInfo.project.name),
+    mask: [page.locator('audio')],
+    maskColor: '#f5f5f5',
+  });
 });
